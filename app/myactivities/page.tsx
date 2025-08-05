@@ -1,13 +1,16 @@
 "use client";
 import { useSession } from 'next-auth/react';
 import React from 'react'
+import { AddActivityBackground } from '../components/AddActivityBackground';
+import ActivityCardsContainer from '../components/ActivityCardsContainer';
 
 const MyActivities = () => {
     const session = useSession();
-    console.log(session)
+    // console.log(session)
   return (
-    <div>
-      Hello
+    <div className="m-5">
+      <AddActivityBackground/>
+      <ActivityCardsContainer/>
     </div>
   )
 }

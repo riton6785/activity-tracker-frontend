@@ -18,7 +18,7 @@ export function NavbarMenu() {
   const navItems = [
     {
       name: "My activities",
-      link: "/my_activities",
+      link: "/myactivities",
     },
     {
       name: "Overdues",

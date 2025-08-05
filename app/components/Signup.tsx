@@ -19,7 +19,7 @@ export function SignupForm() {
     e.preventDefault();
     try {
       const userData = {name, email, password, mobile_no: mobileNo, purpose}
-      await axios.post(`${process.env.BASE_URL}create/users`, userData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/create/users`, userData, {
         headers: {
           "Content-Type": "application/json"
         }
