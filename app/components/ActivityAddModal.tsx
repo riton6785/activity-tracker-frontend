@@ -14,12 +14,14 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { useActivityStore } from "@/store/actvitystore";
 
 export function ActivityAdddModal() {
   const [task, setTask] = useState("");
   const [summary, setSummary] = useState("");
   const [dueDate, setDueDate] = useState<Date>();
   const { data: session, status } = useSession();
+  const addActivity = useActivityStore((state)=> state.addActivity);
 
   const createActivityHandler = async (setOpen: (val: boolean) => void) => {
     const activityData = {
@@ -41,7 +43,7 @@ export function ActivityAdddModal() {
             },
           }
         );
-        console.log(data);
+        addActivity(data);
         setOpen(false); // Close modal on success
       } catch (error) {
         console.error(error, "Error while creating user");

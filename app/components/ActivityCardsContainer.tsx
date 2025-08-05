@@ -2,18 +2,13 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import ActivityCards from "./ActivityCards";
+import { useActivityStore } from "@/store/actvitystore";
 
-export interface Activity {
-  task: string;
-  completed: boolean;
-  summary: string;
-  user_id: number;
-  due_date: string;
-  id: number;
-}
 const ActivityCardsContainer = () => {
   const { data: session, status } = useSession();
-  const [activities, setActivities] = useState<Activity[]>();
+  // const [activities, setActivities] = useState<Activity[]>();
+  const activities = useActivityStore((state)=> state.activities);
+  const setActivities = useActivityStore((state)=> state.setActivities);
 
   const getAllActivities = async () => {
     try {
@@ -29,7 +24,6 @@ const ActivityCardsContainer = () => {
           },
         }
       );
-      console.log(data);
       setActivities(data);
     } catch (error) {
       console.error(error);
