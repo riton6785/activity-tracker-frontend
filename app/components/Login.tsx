@@ -3,14 +3,28 @@ import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export function LoginForm() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted", email, password);
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,  // We handle redirect manually
+    });
+
+    if (result?.ok) {
+      router.push("/myactivities");
+    }
+    else {
+      alert("login failed")
+    }
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-black dark:via-zinc-900 dark:to-zinc-800 px-4">
@@ -21,7 +35,7 @@ export function LoginForm() {
         <form className="my-8" onSubmit={handleSubmit}>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>
-            <Input id="email" placeholder="projectmayhem@fc.com" type="email" onChange={(e)=> setEmail(e.target.value)}/>
+            <Input id="email" placeholder="projectmayhem@fc.com" type="text" onChange={(e)=> setEmail(e.target.value)}/>
           </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="password">Password</Label>

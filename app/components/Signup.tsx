@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 export function SignupForm() {
   const [name, setName] = useState<string>();
@@ -11,10 +13,21 @@ export function SignupForm() {
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const [mobileNo, setMobileNo] = useState<string>();
   const [purpose, setPurpose] = useState<string>();
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Form submitted", name, email, password, confirmPassword, purpose, mobileNo);
+    try {
+      const userData = {name, email, password, mobile_no: mobileNo, purpose}
+      await axios.post(`${process.env.BASE_URL}create/users`, userData, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+      router.push("/login");
+    } catch (error) {
+      console.error(error, "Error while creating user");
+    }
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-black dark:via-zinc-900 dark:to-zinc-800 px-4">
