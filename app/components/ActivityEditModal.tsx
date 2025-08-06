@@ -8,15 +8,17 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { useSession } from "next-auth/react";
 import axios from "axios";
+import { Modal, ModalBody, ModalContent, ModalFooter, ModalTrigger, useModal } from "@/components/ui/animated-modal";
+import { cn } from "@/lib/utils";
+import { IconEdit } from "@tabler/icons-react";
+import { Label } from "@radix-ui/react-label";
 
 interface ActivityEditModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  activity: Activity | null; // nullable to allow default empty state
+  activity: Activity;
   type: string
 }
 
-export const ActivityEditModal: React.FC<ActivityEditModalProps> = ({ isOpen, onClose, activity, type }) => {
+export const ActivityEditModal: React.FC<ActivityEditModalProps> = ({ activity, type }) => {
   const [task, setTask] = useState(activity?.task);
   const [summary, setSummary] = useState(activity?.summary);
   const [dueDate, setDueDate] = useState<Date>(new Date(activity?.due_date || new Date()));
@@ -26,12 +28,10 @@ export const ActivityEditModal: React.FC<ActivityEditModalProps> = ({ isOpen, on
   const updateActivities = useActivityStore((state) => state.updateActivities);
   const updateOverdueActivity = useActivityStore((state)=> state.updateOverdueActivity);
 
-  if (!isOpen || !activity) return null;
-
-  const editHandler = async() => {
+  const editHandler = async(setOpen: (val: boolean) => void) => {
     try {
         const editData = {task, summary, id: activity.id, due_date: dueDate};
-        const {data} = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/edit/activity`, editData, {
+        await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/edit/activity`, editData, {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${session?.user.access_token}`
@@ -50,67 +50,88 @@ export const ActivityEditModal: React.FC<ActivityEditModalProps> = ({ isOpen, on
                 task: task 
             })
         }
+        setOpen(false); // Close modal on success
         toast.success("Activity updated Successfully");
-        onClose();
     } catch (error) {
         toast.error("Error while editing the activities")
     }
   }
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 text-black">
-      <div className="bg-white rounded-lg shadow-lg w-full max-w-lg p-6 relative">
-        {/* Close Icon */}
-        <button
-          onClick={onClose}
-          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
-        >
-          <X size={20} />
-        </button>
+    <div className="py-10 flex items-center justify-center">
+      <Modal>
+        <ModalTrigger className="bg-black dark:bg-white dark:text-black text-white flex justify-center group/modal-btn">
+          <span className="group-hover/modal-btn:translate-x-40 text-center transition duration-500">
+            Edit Activity
+          </span>
+          <div className="-translate-x-40 group-hover/modal-btn:translate-x-0 flex items-center justify-center absolute inset-0 transition duration-500 text-white z-20">
+            <IconEdit />
+          </div>
+        </ModalTrigger>
 
-        {/* Modal Content */}
-        <h2 className="text-2xl font-semibold mb-4">Edit Activity</h2>
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Task</label>
-            <Input
-              type="text"
-              defaultValue={task}
-              className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:border-blue-500"
-              onChange={(e) => setTask(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Summary</label>
-            <Input
-              type="text"
-              defaultValue={summary}
-              className="w-full border border-gray-300 rounded p-2 focus:outline-none focus:ring focus:border-blue-500"
-              onChange={(e)=> setSummary(e.target.value)}
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Due Date</label>
-            <Input
+        <ModalBody>
+          <ModalContent>
+            <h4 className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-100 font-bold text-center mb-8">
+              Add your new activity
+            </h4>
+
+            <LabelInputContainer>
+              <Label htmlFor="task">Task</Label>
+              <Input id="task" placeholder="Tyler" type="text" onChange={(e) => setTask(e.target.value)} defaultValue={task} />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+              <Label htmlFor="summary">Summary</Label>
+              <Input id="summary" placeholder="Tyler" type="text" onChange={(e) => setSummary(e.target.value)} defaultValue={summary} />
+            </LabelInputContainer>
+
+            <LabelInputContainer>
+              <Label htmlFor="activityDate">Due Date</Label>
+              <Input
                 id="activityDate"
                 name="activityDate"
                 type="date"
+                defaultValue={dueDate.toISOString().split("T")[0]}
                 className="w-full"
-                defaultValue={dueDate.toISOString().split('T')[0]}
                 onChange={(e) => setDueDate(new Date(e.target.value))}
               />
-          </div>
-        </div>
-        {/* Actions */}
-        <div className="mt-6 flex justify-end gap-2">
-          <Button onClick={onClose} className="bg-gray-800 text-white hover:bg-gray-400">
-            Cancel
-          </Button>
-          <Button className="bg-black text-white hover:bg-gray-800" onClick={editHandler}>
-            Save Changes
-          </Button>
-        </div>
-      </div>
+            </LabelInputContainer>
+          </ModalContent>
+
+          <ModalFooter className="gap-4">
+            <FooterButtons editHandler={editHandler} />
+        </ModalFooter>
+        </ModalBody>
+      </Modal>
     </div>
+  );
+};
+
+const LabelInputContainer = ({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) => {
+  return (
+    <div className={cn("flex w-full flex-col space-y-2", className)}>
+      {children}
+    </div>
+  );
+};
+
+const FooterButtons = ({ editHandler }: { editHandler: (setOpen: (val: boolean) => void) => void }) => {
+  const { setOpen } = useModal(); //We can use this hook when modal is loaded so that's why extracted footer in to other components.
+
+  return (
+    <>
+      <Button
+        className="w-50 bg-black cursor-pointer"
+        onClick={() => setOpen(false)}
+      >
+        Cancel
+      </Button>
+      <Button className="w-50 bg-black cursor-pointer" onClick={() => editHandler(setOpen)}>Update</Button></>
   );
 };

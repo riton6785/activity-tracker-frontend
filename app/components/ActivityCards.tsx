@@ -74,15 +74,13 @@ const ActivityCards = ({ activity, type }: { activity: Activity, type: string })
           {activity.completed ? "Completed" : "Pending"}
         </span>
 
-        <button
+        {/* <button
           onClick={() => setIsEditOpen(true)}
           className="text-white hover:text-gray-300 transition"
         >
           <IconEdit size={18} />
-        </button>
+        </button> */}
         <ActivityEditModal
-          isOpen={isEditOpen}
-          onClose={() => setIsEditOpen(false)}
           activity={activity}
           type={type}
         />
