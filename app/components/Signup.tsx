@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/stateful-button";
+import { toast } from "sonner";
 
 export function SignupForm() {
   const [name, setName] = useState<string>();
@@ -24,9 +25,10 @@ export function SignupForm() {
           "Content-Type": "application/json"
         }
       })
+      toast.success("Account created successfully Please log in");
       router.push("/login");
     } catch (error) {
-      console.error(error, "Error while creating user");
+      toast.error("Some thing went wrong while creating acoount");
     }
   };
   return (

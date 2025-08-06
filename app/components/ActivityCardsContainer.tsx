@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import ActivityCards from "./ActivityCards";
 import { useActivityStore } from "@/store/actvitystore";
 import { Loader } from "./Loader";
+import { toast } from "sonner";
 
 const ActivityCardsContainer = () => {
   const [isFetched, setIsFetched] = useState(false);  // State for managing laoder
@@ -30,7 +31,7 @@ const ActivityCardsContainer = () => {
       setIsFetched(true);
     } catch (error) {
       setIsFetched(true);
-      console.error(error);
+      toast.error("Error While fetching the actvities");
     }
   };
 

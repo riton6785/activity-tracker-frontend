@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/stateful-button";
+import { toast } from "sonner";
 
 export function LoginForm() {
   const [email, setEmail] = useState<string>();
@@ -20,10 +21,11 @@ export function LoginForm() {
     });
 
     if (result?.ok) {
+      toast.success("Loggin Successful");
       router.push("/myactivities");
     }
     else {
-      alert("login failed")
+      toast.error("Some thing went wrong whil logging in");
     }
   };
   return (

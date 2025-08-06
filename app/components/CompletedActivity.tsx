@@ -4,6 +4,7 @@ import { useSession } from 'next-auth/react';
 import React, { useEffect, useState } from 'react'
 import ActivityCards from './ActivityCards';
 import { Loader } from './Loader';
+import { toast } from 'sonner';
 
 const CompletedActivity = () => {
   const [isFetched, setIsFetched] = useState(false); //state for managing the loader.
@@ -22,7 +23,7 @@ const CompletedActivity = () => {
             setIsFetched(true);
         } catch (error) {
           setIsFetched(true);
-            console.error(error);
+            toast.error("Some thing went wrong fetching completed activities");
         }
     }
     useEffect(()=> {

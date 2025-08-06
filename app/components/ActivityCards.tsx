@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { Activity, useActivityStore } from "@/store/actvitystore";
 import clsx from "clsx";
 import { Button } from "@/components/ui/stateful-button";
+import { toast } from "sonner";
 
 const ActivityCards = ({ activity, type }: { activity: Activity, type: string }) => {
   const [showNotes, setShowNotes] = useState<boolean>(false);
@@ -41,7 +42,7 @@ const ActivityCards = ({ activity, type }: { activity: Activity, type: string })
 
         setShowNotes(false);
     } catch (error) {
-        console.error(error);
+        toast.error("Some thing went wrong markinga actvities done")
     }
   }
 
@@ -50,9 +51,9 @@ const ActivityCards = ({ activity, type }: { activity: Activity, type: string })
   return (
     <CometCard key={activity.id}>
       <div className={clsx("flex flex-col w-full rounded-[16px] bg-[#1F2121] p-4 space-y-4",{
-    "text-red-900": isOverdue,
-    "text-yellow-900": isDuedate,
-    "text-white": !isOverdue && !isDuedate,  // default
+    "text-red-900": isOverdue && !activity.completed,
+    "text-yellow-900": isDuedate && !activity.completed,
+    "text-white": (!isOverdue && !isDuedate) || activity.completed,  // default
   })}>
         {/* Task Name + Due Date */}
         <div className="flex justify-between items-center">
@@ -80,7 +81,7 @@ const ActivityCards = ({ activity, type }: { activity: Activity, type: string })
 
           {/* Mark Done Button */}
           <span className="text-sm text-red-500">
-            {isOverdue && `${diffDays} Days overdue`}
+            {(isOverdue && !activity.completed) && `${diffDays} Days overdue`}
           </span>
           {!activity.completed && (
             <button
@@ -91,7 +92,11 @@ const ActivityCards = ({ activity, type }: { activity: Activity, type: string })
             </button>
           )}
         </div>
-
+        {
+          activity.completed && <div className="mt-4 space-y-2">
+            <span>{activity.finish_note}</span>
+          </div>
+        }
         {/* Textarea + Submit Button */}
         {showNotes && (
           <div className="mt-4 space-y-2">

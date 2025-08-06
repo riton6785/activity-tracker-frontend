@@ -7,6 +7,7 @@ export type Activity = {
   user_id: number;
   due_date: string;
   id: number;
+  finish_note: string | null;
 };
 
 type ActivityStore = {

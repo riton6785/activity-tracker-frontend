@@ -16,6 +16,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useActivityStore } from "@/store/actvitystore";
 import { Button } from "@/components/ui/stateful-button";
+import { toast } from "sonner";
 
 export function ActivityAdddModal() {
   const [task, setTask] = useState("");
@@ -47,7 +48,7 @@ export function ActivityAdddModal() {
         addActivity(data);
         setOpen(false); // Close modal on success
       } catch (error) {
-        console.error(error, "Error while creating user");
+        toast.error("Error while creating Actvity something went wrong");
       }
     }
   };
