@@ -72,7 +72,7 @@ export const ActivityEditModal: React.FC<ActivityEditModalProps> = ({ activity, 
         <ModalBody>
           <ModalContent>
             <h4 className="text-lg md:text-2xl text-neutral-600 dark:text-neutral-100 font-bold text-center mb-8">
-              Add your new activity
+              Edit your activity
             </h4>
 
             <LabelInputContainer>
