@@ -1,13 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { Activity } from "./ActivityCardsContainer";
 import { CometCard } from "@/components/ui/comet-card";
 import axios from "axios";
 import { useSession } from "next-auth/react";
+import { Activity } from "@/store/actvitystore";
+import clsx from "clsx";
 
 const ActivityCards = ({ activity }: { activity: Activity }) => {
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
-  
+  const isOverdue = new Date().toLocaleDateString('en-CA') > activity.due_date;
+  const isDuedate = new Date().toLocaleDateString('en-CA') === activity.due_date;
+
+  // if the date is overdue calculate days
+  const diffDays = isOverdue
+  ? Math.floor((new Date().getTime() - new Date(activity.due_date).getTime()) / (1000 * 60 * 60 * 24))
+  : 0;
+
+  console.log("testing", activity.due_date, new Date().toISOString().split("T")[0])
   const {data: session, status} = useSession()
   const handleSubmitNote= async()=> {
     try {
@@ -28,11 +37,14 @@ const ActivityCards = ({ activity }: { activity: Activity }) => {
   }
 
   useEffect(()=> {
-
   }, [status])
   return (
     <CometCard key={activity.id}>
-      <div className="flex flex-col w-full rounded-[16px] bg-[#1F2121] p-4 text-white space-y-4">
+      <div className={clsx("flex flex-col w-full rounded-[16px] bg-[#1F2121] p-4 space-y-4",{
+    "text-red-900": isOverdue,
+    "text-yellow-900": isDuedate,
+    "text-white": !isOverdue && !isDuedate,  // default
+  })}>
         {/* Task Name + Due Date */}
         <div className="flex justify-between items-center">
           <h3 className="text-lg font-semibold">{activity.task}</h3>
@@ -58,6 +70,9 @@ const ActivityCards = ({ activity }: { activity: Activity }) => {
           </span>
 
           {/* Mark Done Button */}
+          <span className="text-sm text-red-500">
+            {isOverdue && `${diffDays} Days overdue`}
+          </span>
           {!activity.completed && (
             <button
               onClick={() => setShowNotes(true)}

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-type Activity = {
+export type Activity = {
   task: string;
   completed: boolean;
   summary: string;
@@ -13,6 +13,10 @@ type ActivityStore = {
   activities: Activity[];
   addActivity: (activity: Activity) => void;
   setActivities: (activities: Activity[]) => void;
+  overdueActivities: Activity[];
+  setOverdueActivity: (activities: Activity[]) => void;
+  completedActivities: Activity[];
+  setCompletedActivity: (activities: Activity[]) => void;
 };
 
 export const useActivityStore = create<ActivityStore>((set) => ({
@@ -20,4 +24,8 @@ export const useActivityStore = create<ActivityStore>((set) => ({
   addActivity: (activity) =>
     set((state) => ({ activities: [activity, ...state.activities] })),
   setActivities: (activities) => set({ activities }),
+  overdueActivities: [],
+  setOverdueActivity: (overdueActivities) => set({ overdueActivities }),
+  completedActivities: [],
+  setCompletedActivity: (completedActivities) => set({completedActivities}),
 }));

@@ -5,8 +5,6 @@ import { AddActivityBackground } from '../components/AddActivityBackground';
 import ActivityCardsContainer from '../components/ActivityCardsContainer';
 
 const MyActivities = () => {
-    const session = useSession();
-    // console.log(session)
   return (
     <div className="m-5">
       <AddActivityBackground/>

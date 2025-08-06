@@ -6,7 +6,6 @@ import { useActivityStore } from "@/store/actvitystore";
 
 const ActivityCardsContainer = () => {
   const { data: session, status } = useSession();
-  // const [activities, setActivities] = useState<Activity[]>();
   const activities = useActivityStore((state)=> state.activities);
   const setActivities = useActivityStore((state)=> state.setActivities);
 
@@ -34,7 +33,7 @@ const ActivityCardsContainer = () => {
     getAllActivities();
   }, [status]);
   return (
-    <div className="p-4 mx-auto">
+    <div className="p-4 mx-auto pt-15">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {activities?.map((activity) => (
           <ActivityCards key={activity.id} activity={activity}/>

@@ -33,31 +33,26 @@ export function NavbarMenu() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="fixed top-0 left-0 w-full z-50 bg-black/50 backdrop-blur-md border-b border-neutral-700 shadow-md">
+    <div className="w-full bg-white/70 dark:bg-black/70 backdrop-blur-md shadow-sm fixed top-0 z-50">
       <Navbar>
-        {/* Desktop Nav */}
-        <NavBody className="max-w-7xl mx-auto px-4 py-2 flex items-center justify-between">
+        {/* Desktop Navigation */}
+        <NavBody>
           <Link
             href="/"
-            className="flex items-center space-x-2 text-white hover:text-indigo-400 transition"
+            className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
           >
-            <FcTodoList size={'28px'} />
-            <span className="text-base font-semibold">Plan your activities</span>
+            <FcTodoList size={'30px'}/>
+            <span className="font-medium text-black dark:text-white">
+              Plan your activities
+            </span>
           </Link>
 
-          <NavItems items={navItems}/>
+          <NavItems items={navItems} />
         </NavBody>
 
-        {/* Mobile Nav */}
+        {/* Mobile Navigation */}
         <MobileNav>
-          <MobileNavHeader className="flex items-center justify-between px-4 py-2">
-            <Link
-              href="/"
-              className="flex items-center space-x-2 text-white hover:text-indigo-400 transition"
-            >
-              <FcTodoList size={'28px'} />
-              <span className="text-base font-semibold">Plan your activities</span>
-            </Link>
+          <MobileNavHeader>
             <MobileNavToggle
               isOpen={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -67,17 +62,16 @@ export function NavbarMenu() {
           <MobileNavMenu
             isOpen={isMobileMenuOpen}
             onClose={() => setIsMobileMenuOpen(false)}
-            className="bg-black/80 backdrop-blur-md border-t border-neutral-700"
           >
             {navItems.map((item, idx) => (
-              <Link
+              <a
                 key={`mobile-link-${idx}`}
                 href={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="block px-4 py-2 text-white hover:text-indigo-400 transition"
+                className="relative text-neutral-600 dark:text-neutral-300"
               >
-                {item.name}
-              </Link>
+                <span className="block">{item.name}</span>
+              </a>
             ))}
           </MobileNavMenu>
         </MobileNav>
