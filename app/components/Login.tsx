@@ -5,14 +5,14 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
+import { Button } from "@/components/ui/stateful-button";
 
 export function LoginForm() {
   const [email, setEmail] = useState<string>();
   const [password, setPassword] = useState<string>();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     const result = await signIn("credentials", {
       email,
       password,
@@ -32,7 +32,6 @@ export function LoginForm() {
         <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
           Login to PlanPing
         </h2>
-        <form className="my-8" onSubmit={handleSubmit}>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>
             <Input id="email" placeholder="projectmayhem@fc.com" type="text" onChange={(e)=> setEmail(e.target.value)}/>
@@ -41,14 +40,9 @@ export function LoginForm() {
             <Label htmlFor="password">Password</Label>
             <Input id="password" placeholder="Password" type="password" onChange={(e)=> setPassword(e.target.value)}/>
           </LabelInputContainer>
-          <button
-            className="cursor-pointer group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-            type="submit"
-          >
-            Login &rarr;
-            <BottomGradient />
-          </button>
-        </form>
+          <div className="flex h-40 w-full items-center justify-center">
+            <Button className="w-full bg-black" onClick={handleSubmit}>Login &rarr;</Button>
+          </div>
       </div>
     </div>
   );

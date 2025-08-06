@@ -4,6 +4,7 @@ import axios from "axios";
 import { useSession } from "next-auth/react";
 import { Activity, useActivityStore } from "@/store/actvitystore";
 import clsx from "clsx";
+import { Button } from "@/components/ui/stateful-button";
 
 const ActivityCards = ({ activity, type }: { activity: Activity, type: string }) => {
   const [showNotes, setShowNotes] = useState<boolean>(false);
@@ -18,7 +19,6 @@ const ActivityCards = ({ activity, type }: { activity: Activity, type: string })
   ? Math.floor((new Date().getTime() - new Date(activity.due_date).getTime()) / (1000 * 60 * 60 * 24))
   : 0;
 
-  console.log("testing", activity.due_date, new Date().toISOString().split("T")[0])
   const {data: session, status} = useSession()
   const handleSubmitNote= async()=> {
     try {
@@ -102,12 +102,7 @@ const ActivityCards = ({ activity, type }: { activity: Activity, type: string })
               onChange={(e)=> setNotes(e.target.value)}
             />
             <div className="flex gap-2">
-              <button
-                onClick={handleSubmitNote}
-                className="px-3 py-1 text-xs rounded bg-green-600 text-white hover:bg-green-700 transition"
-              >
-                Submit
-              </button>
+                <Button className="w-full" onClick={handleSubmitNote}>Submit</Button>
               <button
                 onClick={() => setShowNotes(false)}
                 className="px-3 py-1 text-xs rounded bg-gray-400 text-white hover:bg-gray-500 transition"

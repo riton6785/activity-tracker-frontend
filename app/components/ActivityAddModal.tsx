@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useActivityStore } from "@/store/actvitystore";
+import { Button } from "@/components/ui/stateful-button";
 
 export function ActivityAdddModal() {
   const [task, setTask] = useState("");
@@ -126,12 +127,14 @@ const FooterButtons = ({ createActivityHandler }: { createActivityHandler: (setO
       >
         Cancel
       </button>
-      <button
+      {/* <button
         className="cursor-pointer bg-black text-white dark:bg-white dark:text-black text-sm px-2 py-1 rounded-md border border-black w-28"
         onClick={() => createActivityHandler(setOpen)}
       >
         ADD
-      </button>
+      </button> */}
+      <Button className="w-50 bg-black" onClick={() => createActivityHandler(setOpen)}>Add</Button>
+      
     </>
   );
 };

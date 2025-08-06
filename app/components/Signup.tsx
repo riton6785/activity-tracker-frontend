@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/stateful-button";
 
 export function SignupForm() {
   const [name, setName] = useState<string>();
@@ -15,8 +16,7 @@ export function SignupForm() {
   const [purpose, setPurpose] = useState<string>();
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     try {
       const userData = {name, email, password, mobile_no: mobileNo, purpose}
       await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/create/users`, userData, {
@@ -35,7 +35,6 @@ export function SignupForm() {
         <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
           Welcome to PlanPing
         </h2>
-        <form className="my-8" onSubmit={handleSubmit}>
             <LabelInputContainer>
               <Label htmlFor="name">Name</Label>
               <Input id="name" placeholder="Tyler" type="text" onChange={(e)=> setName(e.target.value)}/>
@@ -60,14 +59,9 @@ export function SignupForm() {
             <Label htmlFor="purpose">Purpose</Label>
             <Input id="purpose" placeholder="Purpose" type="text" onChange={(e)=> setPurpose(e.target.value)}/>
           </LabelInputContainer>
-          <button
-            className="cursor-pointer group/btn relative block h-10 w-full rounded-md bg-gradient-to-br from-black to-neutral-600 font-medium text-white shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:bg-zinc-800 dark:from-zinc-900 dark:to-zinc-900 dark:shadow-[0px_1px_0px_0px_#27272a_inset,0px_-1px_0px_0px_#27272a_inset]"
-            type="submit"
-          >
-            Sign up &rarr;
-            <BottomGradient />
-          </button>
-        </form>
+          <div className="flex h-40 w-full items-center justify-center">
+            <Button className="w-full bg-black" onClick={handleSubmit}>Sign up &rarr;</Button>
+          </div>
       </div>
     </div>
   );
