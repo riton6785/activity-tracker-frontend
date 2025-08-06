@@ -2,14 +2,16 @@ import React, { useEffect, useState } from "react";
 import { CometCard } from "@/components/ui/comet-card";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { Activity } from "@/store/actvitystore";
+import { Activity, useActivityStore } from "@/store/actvitystore";
 import clsx from "clsx";
 
-const ActivityCards = ({ activity }: { activity: Activity }) => {
+const ActivityCards = ({ activity, type }: { activity: Activity, type: string }) => {
   const [showNotes, setShowNotes] = useState<boolean>(false);
   const [notes, setNotes] = useState<string>("");
   const isOverdue = new Date().toLocaleDateString('en-CA') > activity.due_date;
   const isDuedate = new Date().toLocaleDateString('en-CA') === activity.due_date;
+  const removeActivities = useActivityStore((state)=> state.removeActivities);
+  const removeOverdueActivities = useActivityStore((state) => state.removeOverduesActivity);
 
   // if the date is overdue calculate days
   const diffDays = isOverdue
@@ -30,6 +32,13 @@ const ActivityCards = ({ activity }: { activity: Activity }) => {
                 Authorization: `Bearer ${session?.user.access_token}`
             }
         })
+
+        if(type==="all") {
+          removeActivities(activity.id)
+        } else if(type === "overdues") {
+          removeOverdueActivities(activity.id);
+        }
+
         setShowNotes(false);
     } catch (error) {
         console.error(error);

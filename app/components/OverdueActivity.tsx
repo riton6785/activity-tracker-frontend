@@ -29,7 +29,7 @@ const OverdueActivity = () => {
     <div className="p-4 mx-auto pt-15">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {overdueActivities?.map((activity) => (
-          <ActivityCards key={activity.id} activity={activity}/>
+          <ActivityCards key={activity.id} activity={activity} type="overdues"/>
         ))}
       </div>
     </div>
