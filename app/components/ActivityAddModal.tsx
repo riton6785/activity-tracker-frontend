@@ -22,7 +22,7 @@ export function ActivityAdddModal() {
   const [task, setTask] = useState("");
   const [summary, setSummary] = useState("");
   const [dueDate, setDueDate] = useState<Date>();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const addActivity = useActivityStore((state)=> state.addActivity);
 
   const createActivityHandler = async (setOpen: (val: boolean) => void) => {

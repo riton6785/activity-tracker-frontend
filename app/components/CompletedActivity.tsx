@@ -6,14 +6,19 @@ import ActivityCards from './ActivityCards';
 import { Loader } from './Loader';
 import { toast } from 'sonner';
 import { CometCard } from '@/components/ui/comet-card';
+import { useRouter } from 'next/navigation';
 
 const CompletedActivity = () => {
   const [isFetched, setIsFetched] = useState(false); //state for managing the loader.
   const {data: session, status} = useSession();
   const completedActivities = useActivityStore((state)=> state.completedActivities);
   const setCompletedActivities = useActivityStore((state)=> state.setCompletedActivity)
+  const router = useRouter();
     const fetcCompletedActivities = async() => {
         try {
+          if(!session?.user) {
+              return router.push("/login")
+            }
             setIsFetched(false)
             const {data} = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/completed/activities`, {
                 headers: {

@@ -9,6 +9,7 @@ import {
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import { IconActivity } from "@tabler/icons-react";
+import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -29,23 +30,35 @@ export function NavbarMenu() {
   ];
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const {data: session} = useSession();
 
   return (
     <div className="w-full bg-white/70 dark:bg-black/70 backdrop-blur-md shadow-sm fixed top-0 z-50">
       <Navbar>
         {/* Desktop Navigation */}
-        <NavBody>
+        <NavBody className="relative z-10">
           <Link
             href="/"
             className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
           >
-            <IconActivity size={'30px'}/>
+            <IconActivity size={"30px"} />
             <span className="font-medium text-black dark:text-white">
               Plan your activities
             </span>
           </Link>
 
           <NavItems items={navItems} />
+
+          {session?.user.access_token && (
+            <div className="ml-4 relative z-10">
+              <button
+                onClick={() => signOut({ callbackUrl: "/" })}
+                className="px-4 py-2 bg-black text-white rounded hover:bg-gray-800 transition"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </NavBody>
 
         {/* Mobile Navigation */}

@@ -5,15 +5,20 @@ import React, { useEffect, useState } from 'react'
 import ActivityCards from './ActivityCards';
 import { Loader } from './Loader';
 import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const OverdueActivity = () => {
     const [isFetched, setIsFetched] = useState(false); //state for managing the loader.
     const {data: session, status} = useSession();
     const overdueActivities = useActivityStore((state)=> state.overdueActivities);
     const setOverdueActivity = useActivityStore((state)=> state.setOverdueActivity);
+    const router = useRouter()
 
     const fetcOverdueActivities = async() => {
         try {
+            if(!session?.user) {
+              return router.push("/login")
+            }
             setIsFetched(false);
             const {data} = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/overdue/activities`, {
                 headers: {
