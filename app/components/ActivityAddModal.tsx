@@ -36,7 +36,7 @@ export function ActivityAdddModal() {
     if (session) {
       try {
         const { data } = await axios.post(
-          `${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/activities`,
+          `${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/activities/`,
           activityData,
           {
             headers: {
