@@ -18,7 +18,6 @@ const ActivityCardsContainer = () => {
       if (!session) {
         return;
       }
-      console.log(session);
       const { data } = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/activities/`,
         {
