@@ -16,8 +16,11 @@ const OverdueActivity = () => {
 
     const fetcOverdueActivities = async() => {
         try {
-            if(!session?.user) {
-              return router.push("/login")
+            if (status === "loading") return; // wait for session to load as usession is asynchronus in nature
+
+            if (status === "unauthenticated") {
+              router.push("/login");
+              return;
             }
             setIsFetched(false);
             const {data} = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/overdue/activities`, {
