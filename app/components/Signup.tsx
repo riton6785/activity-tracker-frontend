@@ -32,14 +32,14 @@ export function SignupForm() {
     }
   };
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-black dark:via-zinc-900 dark:to-zinc-800 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-black">
       <div className="shadow-input mx-auto w-full max-w-2xl rounded-none bg-white p-4 md:rounded-4xl md:p-8 dark:bg-black border">
         <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-          Welcome to PlanPing
+          Welcome to Focuspulse
         </h2>
             <LabelInputContainer>
               <Label htmlFor="name">Name</Label>
-              <Input id="name" placeholder="Tyler" type="text" onChange={(e)=> setName(e.target.value)}/>
+              <Input id="name" placeholder="Enter your name" type="text" onChange={(e)=> setName(e.target.value)}/>
             </LabelInputContainer>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>

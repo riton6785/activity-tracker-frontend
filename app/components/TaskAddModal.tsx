@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, {useState } from "react";
 import {
   Modal,
   ModalBody,
@@ -8,7 +8,7 @@ import {
   ModalTrigger,
   useModal,
 } from "@/components/ui/animated-modal";
-import { IconActivity, IconPlus } from "@tabler/icons-react";
+import { IconPlus } from "@tabler/icons-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
@@ -48,11 +48,10 @@ export function TaskAddModal() {
             },
           }
         );
-        console.log(data);
         setOpen(false); // Close modal on success
         addTask(data);
         toast.success('task created successfully')
-      } catch (error) {
+      } catch {
         toast.error("Error while creating Task something went wrong");
       }
     };
