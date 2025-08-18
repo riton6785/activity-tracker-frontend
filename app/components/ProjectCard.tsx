@@ -1,0 +1,70 @@
+import React from "react";
+import { useSession } from "next-auth/react";
+import { Project } from "@/store/actvitystore";
+import clsx from "clsx";
+import { IconCircleCheckFilled, IconClockFilled } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
+
+const ProjectCards = ({ project }: { project: Project }) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+
+  const isCompleted = project.completed;
+
+  const dueDate = new Date(project.due_date).toLocaleDateString(undefined, {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  const handleCardClick = () => {
+    router.push(`/projects/${project.id}/tasks`);
+  };
+
+  return (
+    <div
+        onClick={handleCardClick}
+      className={clsx(
+        "flex flex-col justify-between w-full rounded-xl bg-[#1F2121] p-6 space-y-4 shadow-lg border border-neutral-800 hover:border-indigo-500 transition-all duration-300 group cursor-pointer"
+      )}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-semibold text-white truncate">
+          {project.name}
+        </h2>
+        <span
+          className={clsx(
+            "inline-flex items-center px-3 py-1 rounded-full text-sm font-medium",
+            isCompleted ? "bg-green-600 text-white" : "bg-yellow-500 text-black"
+          )}
+        >
+          {isCompleted ? (
+            <>
+              <IconCircleCheckFilled className="h-4 w-4 mr-1" /> Completed
+            </>
+          ) : (
+            <>
+              <IconClockFilled className="h-4 w-4 mr-1" /> Pending
+            </>
+          )}
+        </span>
+      </div>
+
+      {/* Description */}
+      <p className="text-sm text-gray-300 leading-relaxed line-clamp-3">
+        {project.description}
+      </p>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between text-sm text-gray-400 pt-2 border-t border-neutral-700 mt-auto">
+        <span>
+          Due: <span className="text-white font-medium">{dueDate}</span>
+        </span>
+      </div>
+    </div>
+  );
+};
+
+export default ProjectCards;

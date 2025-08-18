@@ -22,7 +22,7 @@ export function LoginForm() {
 
     if (result?.ok) {
       toast.success("Loggin Successful");
-      router.push("/myactivities");
+      router.push("/");
     }
     else {
       toast.error("Some thing went wrong whil logging in");
@@ -32,7 +32,7 @@ export function LoginForm() {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 via-white to-gray-200 dark:from-black dark:via-zinc-900 dark:to-zinc-800 px-4">
       <div className="shadow-input mx-auto w-full max-w-2xl rounded-none bg-white p-4 md:rounded-4xl md:p-8 dark:bg-black border">
         <h2 className="text-xl font-bold text-neutral-800 dark:text-neutral-200">
-          Login to PlanPing
+          Login to Focuspluse
         </h2>
           <LabelInputContainer className="mb-4">
             <Label htmlFor="email">Email Address</Label>

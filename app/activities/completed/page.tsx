@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import CompletedActivity from '../components/CompletedActivity'
+import CompletedActivity from '../../components/CompletedActivity'
 
 const CompletedPage = () => {
   return (

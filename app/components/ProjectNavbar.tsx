@@ -13,14 +13,14 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 
-export function NavbarMenu() {
+export function ProjectNavbar() {
   const navItems = [
     {
-      name: "Projects",
-      link: "/projects",
+      name: "My Projects",
+      link: "/projects/myprojects",
     },
     {
-      name: "Activity",
+      name: "My activities",
       link: "/activities",
     },
   ];

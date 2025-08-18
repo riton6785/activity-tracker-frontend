@@ -13,15 +13,23 @@ import { signOut, useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState } from "react";
 
-export function NavbarMenu() {
+export function ActivityNavbar() {
   const navItems = [
+    {
+      name: "My activities",
+      link: "/activities/myactivities",
+    },
+    {
+      name: "Overdues",
+      link: "/activities/overdues",
+    },
+    {
+      name: "Completed",
+      link: "/activities/completed",
+    },
     {
       name: "Projects",
       link: "/projects",
-    },
-    {
-      name: "Activity",
-      link: "/activities",
     },
   ];
 

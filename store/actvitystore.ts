@@ -10,6 +10,25 @@ export type Activity = {
   finish_note: string | null;
 };
 
+export type Project = {
+  name: string
+  completed: boolean;
+  description: string;
+  user_id: number;
+  due_date: string;
+  id: number;
+}
+
+export type Task = {
+  name: string
+  completed: boolean;
+  description: string;
+  user_id: number;
+  due_date: string;
+  id: number;
+  project_id: number
+}
+
 type ActivityStore = {
   activities: Activity[];
   addActivity: (activity: Activity) => void;
@@ -51,4 +70,30 @@ export const useActivityStore = create<ActivityStore>((set) => ({
     })),
   completedActivities: [],
   setCompletedActivity: (completedActivities) => set({completedActivities}),
+}));
+
+type ProjectStore = {
+  projects: Project[]
+  addproject: (project: Project) => void;
+  setProjects: (projects: Project[]) => void;
+}
+
+type TaskStore = {
+  tasks: Task[];
+  addTasks: (task: Task) => void;
+  setTasks: (tasks: Task[]) => void;
+}
+
+export const useProjectStore = create<ProjectStore>((set) => ({
+  projects: [],
+  addproject: (project) =>
+    set((state) => ({ projects: [project, ...state.projects] })),
+  setProjects: (projects) => set({ projects }),
+}));
+
+export const useTaskStore = create<TaskStore>((set) => ({
+  tasks: [],
+  addTasks: (task) => 
+    set((state)=> ({tasks: [task, ...state.tasks]})),
+  setTasks: (tasks) => set({tasks}),
 }));

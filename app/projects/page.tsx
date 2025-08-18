@@ -1,11 +1,10 @@
 "use client";
 import { useSession } from 'next-auth/react';
 import React, { useEffect } from 'react'
-import { AddActivityBackground } from '../components/AddActivityBackground';
-import ActivityCardsContainer from '../components/ActivityCardsContainer';
 import { useRouter } from 'next/navigation';
+import { ProjectPagePageSparkle } from '../components/ProjectPageSparkle';
 
-const MyActivities = () => {
+const Projects = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   useEffect(()=> {
@@ -18,11 +17,12 @@ const MyActivities = () => {
     return;
   }
   return (
-    <div className="m-5">
-      <AddActivityBackground/>
-      <ActivityCardsContainer/>
-    </div>
+    <>
+      <div className="m-5 min-h-screen">
+        <ProjectPagePageSparkle/>
+      </div>
+    </>
   )
 }
 
-export default MyActivities;
+export default Projects;
