@@ -1,21 +1,26 @@
 "use client";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 
 export default function InvitePage() {
-  const searchParams = useSearchParams();
   const router = useRouter();
-  const token = searchParams.get("token");
-
-  const [invite, setInvite] = useState<{
-    status: string,
-    invitee_email_masked?: string
-  }>();
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
   const { data: session, status } = useSession();
+  const [token, setToken] = useState<string | null>(null);
+  const [invite, setInvite] = useState<{
+    status: string;
+    invitee_email_masked?: string;
+  } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string>("");
+
+  // Client-side only logic to get search params
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const tokenParam = searchParams.get("token");
+    setToken(tokenParam);
+  }, []);
 
   // Fetch invite details
   const fetchInvite = async () => {
@@ -57,10 +62,10 @@ export default function InvitePage() {
         `${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/project/invites/${action}`,
         {},  // empty body
         {
-            params: { token },
-            headers: { Authorization: `Bearer ${session?.user.access_token}` }
+          params: { token },
+          headers: { Authorization: `Bearer ${session?.user.access_token}` }
         }
-        );
+      );
 
       if (action === "accept") {
         router.push("/projects");
@@ -76,7 +81,7 @@ export default function InvitePage() {
   };
 
   useEffect(() => {
-    if (status !== "loading") {
+    if (status !== "loading" && token) {
       fetchInvite();
     }
   }, [token, status]);

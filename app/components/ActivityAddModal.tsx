@@ -14,16 +14,20 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useSession } from "next-auth/react";
-import { useActivityStore } from "@/store/actvitystore";
+import { Activity, useActivityStore } from "@/store/actvitystore";
 import { Button } from "@/components/ui/stateful-button";
 import { toast } from "sonner";
+import { useParams } from "next/navigation";
 
-export function ActivityAdddModal() {
+type AddActivityCallback = (activity: Activity) => void;
+
+export function ActivityAdddModal({addActivity}: {addActivity: AddActivityCallback}) {
   const [task, setTask] = useState("");
   const [summary, setSummary] = useState("");
   const [dueDate, setDueDate] = useState<Date>();
   const { data: session } = useSession();
-  const addActivity = useActivityStore((state)=> state.addActivity);
+  // const addActivity = useActivityStore((state)=> state.addActivity);
+  const params  = useParams();
 
   const createActivityHandler = async (setOpen: (val: boolean) => void) => {
     const activityData = {
@@ -31,6 +35,7 @@ export function ActivityAdddModal() {
       summary,
       due_date: dueDate?.toISOString().split("T")[0],
       completed: false,
+      task_id: params.taskId || null
     };
 
     if (session) {

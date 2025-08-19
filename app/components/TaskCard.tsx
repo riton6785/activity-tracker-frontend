@@ -22,7 +22,7 @@ export default function TaskCard({ task }: TaskCardProps) {
   const dueDate = new Date(task.due_date).toLocaleDateString();
   const router = useRouter();
   const params = useParams();
-  const projectId = params.project
+  const projectId = params.projectId
 
   const openTask = ()=> {
     router.push(`/projects/${projectId}/tasks/${task.id}`);

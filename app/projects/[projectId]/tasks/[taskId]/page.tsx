@@ -1,6 +1,9 @@
 "use client";
+import { ActivityAdddModal } from "@/app/components/ActivityAddModal";
+import ActivityCards from "@/app/components/ActivityCards";
 import { Loader } from "@/app/components/Loader";
 import { Button } from "@/components/ui/stateful-button";
+import { useTaskActivityStore } from "@/store/actvitystore";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import { useParams } from "next/navigation";
@@ -39,6 +42,10 @@ export default function TaskPage() {
   const [response, setResponse] = useState<TaskDetails>();
   const params = useParams();
   const { data: session, status } = useSession();
+  const [isActivityFetched, setIsActivityFetched] = useState(false)
+  const setActivities = useTaskActivityStore((state)=> state.setActivities)
+  const activities = useTaskActivityStore((state)=> state.activities)
+  const addActivity = useTaskActivityStore((state)=> state.addActivity)
 
   const [collaborators, setCollaborators] = useState<Assignee[]>([]);
   const fillTaskDetails = async () => {
@@ -62,6 +69,30 @@ export default function TaskPage() {
       toast.error("Error while fetching details");
     }
   };
+
+  const fetchActivities = async()=> {
+    try {
+      setIsActivityFetched(false);
+      if (!session) {
+        return;
+      }
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL_BACKEND}/activities/${params.taskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${session?.user.access_token}`,
+          },
+        }
+      );
+      setActivities(data);
+      setIsActivityFetched(true);
+      console.log(data, "Activitiesssssss");
+    } catch {
+      setIsActivityFetched(true);
+      toast.error("Error While fetching the actvities");
+    }
+  }
+
   const [activeTab, setActiveTab] = useState<"details" | "activity">("details");
   const [selectedAssignees, setSelectedAssignees] = useState<Assignee[]>([]);
 
@@ -70,12 +101,6 @@ export default function TaskPage() {
     label: a.name,
   }));
 
-  if (session) {
-    assigneeOptions.push({
-      value: Number(session?.user.id),
-      label: String(session.user.name),
-    });
-  }
   const handleAssigneeChange = (selected: MultiValue<Option>) => {
     setSelectedAssignees(selected.map((s) => ({ id: s.value, name: s.label })));
   };
@@ -112,6 +137,7 @@ export default function TaskPage() {
 
   useEffect(() => {
     fillTaskDetails();
+    fetchActivities();
   }, [status]);
 
   const handleUpdate = async () => {
@@ -282,7 +308,23 @@ export default function TaskPage() {
                   </div>
                 ) : (
                   <div className="text-gray-300 italic">
-                    Activity tab content goes here...
+                    <div className="flex justify-between items-center">
+                      <h2>Pending Activities related to this</h2>
+                      <ActivityAdddModal addActivity={addActivity}/>
+                    </div>
+                    {isActivityFetched ? (
+                      <div className="p-4 mx-auto pt-15">
+                        <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                          {activities?.map((activity) => (
+                            <ActivityCards key={activity.id} activity={activity} type="all" />
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mx-auto pt-15 flex justify-center">
+                        <Loader />
+                      </div>
+                    )}
                   </div>
                 )}
               </div>

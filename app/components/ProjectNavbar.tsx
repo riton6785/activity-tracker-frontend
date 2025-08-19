@@ -20,7 +20,7 @@ export function ProjectNavbar() {
       link: "/projects/myprojects",
     },
     {
-      name: "My activities",
+      name: "Activities",
       link: "/activities",
     },
   ];

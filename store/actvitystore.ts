@@ -72,6 +72,24 @@ export const useActivityStore = create<ActivityStore>((set) => ({
   setCompletedActivity: (completedActivities) => set({completedActivities}),
 }));
 
+type TaskActivityStore = {
+  activities: Activity[];
+  addActivity: (activity: Activity) => void;
+  setActivities: (activities: Activity[]) => void;
+  removeActivities: (id: number) => void
+};
+
+export const useTaskActivityStore = create<TaskActivityStore>((set) => ({
+  activities: [],
+  addActivity: (activity) =>
+    set((state) => ({ activities: [activity, ...state.activities] })),
+  setActivities: (activities) => set({ activities }),
+  removeActivities: (id) =>
+    set((state) => ({
+      activities: state.activities.filter((item) => item.id !== id),
+    })),
+}));
+
 type ProjectStore = {
   projects: Project[]
   addproject: (project: Project) => void;

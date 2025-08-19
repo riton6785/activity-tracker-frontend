@@ -59,12 +59,12 @@ const ProjectCards = ({ project }: { project: Project }) => {
     <div
       onClick={handleCardClick}
       className={clsx(
-        "flex flex-col justify-between w-full rounded-xl bg-[#1F2121] p-6 space-y-4 shadow-lg border border-neutral-800 hover:border-indigo-500 transition-all duration-300 group cursor-pointer relative"
+        "flex flex-col w-full rounded-[16px] bg-[#1F2121] p-4 space-y-4 shadow-md transition-all duration-200 cursor-pointer"
       )}
     >
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-white truncate">
+        <h2 className="text-xl font-semibold text-white">
           {project.name}
         </h2>
         <span
@@ -95,7 +95,7 @@ const ProjectCards = ({ project }: { project: Project }) => {
         <span>
           Due: <span className="text-white font-medium">{dueDate}</span>
         </span>
-        <button
+        {project.user_id === session?.user.id && <button
           onClick={(e) => {
             e.stopPropagation(); // stop navigation otherwise card click event will trigger
             setShowInvite(true);
@@ -104,13 +104,13 @@ const ProjectCards = ({ project }: { project: Project }) => {
         >
           <IconUserPlus className="h-4 w-4" />
           Invite
-        </button>
+        </button>}
       </div>
 
       {/* Invite Modal */}
       {showInvite && (
         <div
-          className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-xl"
+          className="absolute inset-0 bg-black/70 flex items-center justify-center rounded-xl z-100"
           onClick={() => setShowInvite(false)}
         >
           <div
