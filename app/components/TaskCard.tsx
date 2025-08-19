@@ -1,6 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 import { IconCircleCheckFilled, IconClockFilled } from "@tabler/icons-react"; // or your icon set
+import { useParams, useRouter } from "next/navigation";
 
 type Task = {
   name: string;
@@ -19,9 +20,18 @@ type TaskCardProps = {
 export default function TaskCard({ task }: TaskCardProps) {
   const isCompleted = task.completed;
   const dueDate = new Date(task.due_date).toLocaleDateString();
+  const router = useRouter();
+  const params = useParams();
+  const projectId = params.project
+
+  const openTask = ()=> {
+    router.push(`/projects/${projectId}/tasks/${task.id}`);
+  }
+  
 
   return (
     <div
+      onClick={openTask}
       className={clsx(
         "flex flex-col justify-between w-full rounded-xl bg-[#1F2121] p-6 space-y-4 shadow-lg border border-neutral-800 hover:border-indigo-500 transition-all duration-300 group cursor-pointer"
       )}

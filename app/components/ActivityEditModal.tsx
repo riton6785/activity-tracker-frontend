@@ -52,7 +52,7 @@ export const ActivityEditModal: React.FC<ActivityEditModalProps> = ({ activity, 
         }
         setOpen(false); // Close modal on success
         toast.success("Activity updated Successfully");
-    } catch (error) {
+    } catch {
         toast.error("Error while editing the activities")
     }
   }
